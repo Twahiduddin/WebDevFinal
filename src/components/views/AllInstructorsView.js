@@ -3,7 +3,14 @@ import { Link } from "react-router-dom";
 
 const AllInstructorsView = (props) => {
   if (!props.allInstructors.length) {
-    return <div>There are no instructors.</div>;
+    return (
+      <>
+        <div>There are no instructors.</div>{" "}
+        <Link to={`/newinstructor`}>
+          <button>Add New Instructor</button>
+        </Link>
+      </>
+    );
   }
 
   return (
@@ -11,15 +18,30 @@ const AllInstructorsView = (props) => {
       {props.allInstructors.map((instructor) => {
         let name = instructor.firstname + " " + instructor.lastname;
         return (
-          <div key={instructor.id}>
-          <Link to={`/instructor/${instructor.id}`}>
-            <h1>{name}</h1>
-          </Link>
-          <p>{instructor.department}</p>
-        </div>
+          <>
+            <div key={instructor.id} style={{ border: "1px solid grey" }}>
+              <img
+                src={instructor.imageUrl}
+                style={{ width: "55px", height: "55px", marginTop: "20px" }}
+              />
+              &nbsp;&nbsp;
+              <Link to={`/instructor/${instructor.id}`}>
+                <h1>{name}</h1>
+              </Link>
+              <br />
+              <p>{instructor.department}</p>
+              <button onClick={() => props.deleteInstructor(instructor.id)}>
+                Delete
+              </button>
+            </div>
+          </>
         );
-
       })}
+      <br />
+      <br />
+      <Link to={`/newinstructor`}>
+        <button>Add New Instructor</button>
+      </Link>
     </div>
   );
 };

@@ -1,45 +1,54 @@
-import { Link } from "react-router-dom";
-
+import { useHistory } from "react-router";
 
 const InstructorView = (props) => {
-  const {instructor, editCourse, allCourses} = props;
-  let assignedCourses = allCourses.filter(course => course.instructorId===instructor.id);
-  let availableCourses = allCourses.filter(course => course.instructorId!==instructor.id);
-  
+  const { instructor, removeCourse, id, fetchInstructor } = props;
+  const history = useHistory();
+  const remove = async (course) => {
+    course.instructorId = null;
+    console.log(course);
+    await removeCourse(course);
+    await fetchInstructor(id);
+  };
+
+  const gotocourse = (id) => {
+    history.push(`/course/${id}`);
+  };
+
+  const editInstructor = (id) => {
+    history.push(`/editinstructor/${id}`);
+  };
   return (
-    <div>      
+    <div>
+      <img
+        src={instructor.imageUrl}
+        style={{ width: "55px", height: "55px", marginTop: "20px" }}
+      />
+      &nbsp;&nbsp;
       <h1>{instructor.firstname}</h1>
-      <h3>{instructor.department}</h3>
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
-        <div>Assigned courses:
-        {assignedCourses.map( course => {
-          return (
-            <div key={course.id}>
-            <Link to={`/course/${course.id}`}>
-              <h4>{course.title}</h4>
-            </Link>
-            <button onClick={() => editCourse({id:course.id, instructorId: null})}>x</button>
-            </div>
-          );
-        })}</div>
-        <div>Available courses:
-        {availableCourses.map( course => {
-          return (
-            <div key={course.id}>
-            <Link to={`/course/${course.id}`}>
-              <h4>{course.title}</h4>
-            </Link>
-            <button onClick={() => editCourse({id:course.id, instructorId: instructor.id})}>+</button>
-            </div>
-          );
-        })}</div>
-
-      </div>
-
-  
+      <button onClick={() => editInstructor(instructor.id)}>Edit</button>
+      <p>{instructor.department}</p>
+      {instructor.courses.length > 0 ? (
+        <ul>
+          {instructor.courses.map((course) => {
+            return (
+              <>
+                <li
+                  key={course.id}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => gotocourse(course.id)}
+                >
+                  {course.title}
+                </li>
+                <button onClick={() => remove(course)}>Remove</button>
+              </>
+            );
+          })}
+        </ul>
+      ) : (
+        <h3>No Courses Assigned</h3>
+      )}
     </div>
   );
-
 };
 
 export default InstructorView;

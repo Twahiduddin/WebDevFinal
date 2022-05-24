@@ -1,3 +1,8 @@
 # final-frontend
 
-starter code for CSCI 39548 final project
+CSCI - 39548 
+Prof. Melissa Lynch
+Practical Web Development
+Final Project - Twahid Uddin
+
+This project is a simple clone of the CUNY first system. 
